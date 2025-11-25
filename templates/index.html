@@ -42,6 +42,36 @@
                 <label for="name">Nama Lengkap</label>
                 <input type="text" id="name" name="name" required>
             </div>
+            <!-- Kegiatan -->
+<div class="form-group">
+    <label for="kegiatan">Kegiatan</label>
+    <select id="kegiatan" name="kegiatan" required>
+        <option value="" disabled selected>Pilih kegiatan</option>
+        <option value="PA">PA</option>
+        <option value="KP">KP</option>
+        <option value="OLAHRAGA">OLAHRAGA</option>
+        <option value="LAINNYA">Lainnya</option>
+    </select>
+</div>
+
+<!-- Input tambahan jika memilih "Lainnya" -->
+<div class="form-group" id="kegiatanLainWrapper" style="display:none;">
+    <label for="kegiatanLain">Keterangan Kegiatan</label>
+    <input type="text" id="kegiatanLain" name="kegiatanLain" placeholder="Tulis kegiatan lainnya">
+</div>
+
+<script>
+document.getElementById("kegiatan").addEventListener("change", function() {
+    const wrapper = document.getElementById("kegiatanLainWrapper");
+    if (this.value === "LAINNYA") {
+        wrapper.style.display = "block";
+        document.getElementById("kegiatanLain").required = true;
+    } else {
+        wrapper.style.display = "none";
+        document.getElementById("kegiatanLain").required = false;
+    }
+});
+</script>
 
             <!-- Kamera -->
             <div class="camera-wrapper">
