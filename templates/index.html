@@ -46,13 +46,20 @@
 <div class="form-group">
     <label for="kegiatan">Kegiatan</label>
     <select id="kegiatan" name="kegiatan" required>
-        <option value="" disabled selected>Pilih kegiatan</option>
+        <option value="">Pilih Kegiatan</option>
         <option value="PA">PA</option>
         <option value="KP">KP</option>
         <option value="OLAHRAGA">OLAHRAGA</option>
-        <option value="LAINNYA">Lainnya</option>
+        <option value="LAINNYA">LAINNYA</option>
     </select>
 </div>
+
+<!-- Input keterangan lainnya -->
+<div class="form-group" id="kegiatanLainWrapper" style="display:none;">
+    <label for="kegiatanLain">Keterangan Lainnya</label>
+    <input type="text" id="kegiatanLain" name="kegiatanLain">
+</div>
+
 
 <!-- Input tambahan jika memilih "Lainnya" -->
 <div class="form-group" id="kegiatanLainWrapper" style="display:none;">
@@ -203,6 +210,16 @@ document.getElementById("absenForm").addEventListener("submit", function(e) {
     if (imageData.value.trim() === "") {
         e.preventDefault();
         showPopup("Tidak Bisa Submit", "Silakan ambil foto terlebih dahulu.");
+    }
+});
+document.getElementById("kegiatan").addEventListener("change", function() {
+    const wrapper = document.getElementById("kegiatanLainWrapper");
+    if (this.value === "LAINNYA") {
+        wrapper.style.display = "block";
+        document.getElementById("kegiatanLain").required = true;
+    } else {
+        wrapper.style.display = "none";
+        document.getElementById("kegiatanLain").required = false;
     }
 });
 

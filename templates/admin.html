@@ -105,6 +105,8 @@
             <table id="absenTable">
                 <tr>
                     <th>Nama</th>
+                    <th>Kegiatan</th>
+                    <th>Keterangan</th>
                     <th>Foto</th>
                     <th>Waktu</th>
                     <th>Aksi</th>
@@ -113,6 +115,8 @@
                 {% for a in absensi %}
                 <tr>
                     <td class="name-col">{{ a.name }}</td>
+                    <td>{{ a.kegiatan }}</td>
+                    <td>{{ a.kegiatanLain }}</td>
                     <td><img src="{{ url_for('static', filename='registered_photos/' + a.photo) }}" width="80" style="border-radius:8px;"></td>
                     <td class="time-col">{{ a.timestamp }}</td>
                     <td>

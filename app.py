@@ -43,11 +43,14 @@ def index():
 @app.route("/absen", methods=["POST"])
 def absen():
     name = request.form.get("name")
+    kegiatan = request.form.get("kegiatan")
+    kegiatanLain = request.form.get("kegiatanLain") or ""
     imageData = request.form.get("imageData")
 
-    if not name or not imageData:
+    if not name or not kegiatan or not imageData:
         return redirect("/")
 
+    # Simpan foto
     filename = f"{name.replace(' ', '_')}_{uuid.uuid4().hex}.jpg"
     filepath = os.path.join(UPLOAD_FOLDER, filename)
 
@@ -60,8 +63,11 @@ def absen():
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    # Simpan database
     absensi_collection.insert_one({
         "name": name,
+        "kegiatan": kegiatan,
+        "kegiatanLain": kegiatanLain,
         "photo": filename,
         "timestamp": timestamp
     })
@@ -129,6 +135,8 @@ def export_excel():
 
     rows = [{
         "Nama": item.get("name"),
+        "Kegiatan": item.get("kegiatan"),
+        "Keterangan Lainnya": item.get("kegiatanLain"),
         "Foto": item.get("photo"),
         "Waktu": item.get("timestamp")
     } for item in data]
@@ -148,10 +156,8 @@ def admin_logout():
     return redirect("/admin-login")
 
 # ===============================
-# JALANKAN APP
+# RUN APP
 # ===============================
-import os
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
