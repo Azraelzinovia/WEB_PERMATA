@@ -1,0 +1,305 @@
+/* ===========================================
+   VARIABLE WARNA & STYLE
+=========================================== */
+:root {
+  --bg-dark-1: #0d1526;
+  --bg-dark-2: #111a2e;
+  --bg-card: #16243b;
+
+  --accent: #f6c90e;
+  --accent-soft: rgba(246,201,14,0.25);
+
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+
+  --success: #4ade80;
+  --danger: #f87171;
+
+  --radius-xl: 22px;
+  --radius-lg: 16px;
+
+  --shadow-soft: 0 20px 45px rgba(0,0,0,0.40);
+}
+
+
+/* ===========================================
+   RESET
+=========================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #1e2b45, #0d1526 65%, #000);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+
+/* ===========================================
+   NAVBAR
+=========================================== */
+.navbar {
+  padding: 14px 6%;
+  background: rgba(10,18,32,0.82);
+
+  /* fallback agar tidak error di browser lama */
+  background-color: rgba(10,18,32,0.82);
+
+  /* efek blur aman + prefix */
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+
+.logo-image {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 18px rgba(246,201,14,0.45);
+}
+
+.logo-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-text {
+  margin-left: 10px;
+}
+
+.logo-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.logo-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.navbar-right {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-link {
+  padding: 6px 14px;
+  border-radius: 100px;
+  color: var(--text-muted);
+  transition: 0.2s;
+}
+
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.10);
+}
+
+.nav-link.active {
+  background: var(--accent-soft);
+  color: #fffadc;
+}
+
+
+/* ===========================================
+   MAIN + CARD
+=========================================== */
+.main {
+  padding: 50px 6%;
+}
+
+.card {
+  background: var(--bg-card);
+  padding: 25px;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: var(--shadow-soft);
+}
+
+.card-caption {
+  margin-bottom: 16px;
+  color: var(--text-muted);
+}
+
+
+/* ===========================================
+   FORM & CAMERA
+=========================================== */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.08);
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.camera-wrapper {
+  margin-top: 10px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 18px;
+}
+
+video, canvas {
+  width: 100%;
+  display: block;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+}
+
+
+/* ===========================================
+   BUTTONS
+=========================================== */
+.btn {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.btn.primary {
+  background: linear-gradient(to right, #fbd94b, #f6c90e);
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 0 20px rgba(246,201,14,0.35);
+}
+
+.btn.primary:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 28px rgba(246,201,14,0.55);
+}
+
+.btn.ghost {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+}
+
+.btn.ghost:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+
+/* ===========================================
+   POPUP NOTIFICATION (FINAL)
+=========================================== */
+#notifToggle ~ .notif-overlay {
+  display: none;
+}
+
+#notifToggle:checked ~ .notif-overlay {
+  display: flex;
+}
+
+.notif-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* fallback */
+  background: rgba(0,0,0,0.55);
+
+  /* blur aman */
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+
+.notif-card {
+  width: 360px;
+  padding: 32px 26px;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: var(--shadow-soft);
+  text-align: center;
+  animation: popupScale 0.28s ease-out;
+}
+
+@keyframes popupScale {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.notif-icon {
+  font-size: 48px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 6px rgba(246,201,14,0.5));
+}
+
+.notif-card h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.notif-card p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+}
+
+.notif-btn {
+  padding: 12px;
+  background: linear-gradient(to right, #fbd94b, #f6c90e);
+  border-radius: 12px;
+  display: inline-block;
+  cursor: pointer;
+  color: #1a1a1a;
+  font-weight: 600;
+  box-shadow: 0 0 18px rgba(246,201,14,0.45);
+}
+
+.notif-btn:hover {
+  transform: scale(1.05);
+}
+
+
+/* ===========================================
+   RESPONSIVE
+=========================================== */
+@media (max-width: 768px) {
+  .main { padding: 30px 20px; }
+}

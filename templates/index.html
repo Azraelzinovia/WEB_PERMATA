@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi PERMATA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="navbar-left">
+        <div class="logo-image">
+            <img src="{{ url_for('static', filename='images/LOGO_PERMATA.JPG') }}" alt="Logo PERMATA">
+        </div>
+        <div class="logo-text">
+            <div class="logo-title">PERMATA GBKP</div>
+            <div class="logo-subtitle">Runggun Pengumben</div>
+        </div>
+    </div>
+
+    <div class="navbar-right">
+        <a href="/" class="nav-link active">Absensi</a>
+        <a href="/admin-login" class="nav-link">Admin</a>
+    </div>
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+    <div class="card">
+
+        <h2>Absensi Kehadiran</h2>
+        <p class="card-caption">Masukkan nama dan ambil selfie.</p>
+
+        <form id="absenForm" method="POST" action="/absen">
+
+            <!-- Nama -->
+            <div class="form-group">
+                <label for="name">Nama Lengkap</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <!-- Kamera -->
+            <div class="camera-wrapper">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+            </div>
+
+            <input type="hidden" id="imageData" name="imageData">
+
+            <div class="card-actions">
+                <button type="button" class="btn primary" id="captureBtn">Ambil Foto</button>
+                <button type="button" class="btn ghost" id="refreshBtn">Refresh Kamera</button>
+            </div>
+
+            <button type="submit" class="btn primary" style="margin-top:14px;">Kirim Absensi</button>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- NOTIFICATION POPUP -->
+<input type="checkbox" id="notifToggle" hidden>
+
+<div class="notif-overlay">
+    <div class="notif-card">
+        <div class="notif-icon">📸</div>
+        <h3 id="notifTitle">Foto Berhasil!</h3>
+        <p id="notifMessage">Foto berhasil diambil dan diperkecil.</p>
+        <label for="notifToggle" class="notif-btn">Lanjut</label>
+    </div>
+</div>
+
+
+
+<!-- SCRIPT -->
+<script>
+
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const imageData = document.getElementById("imageData");
+const captureBtn = document.getElementById("captureBtn");
+const refreshBtn = document.getElementById("refreshBtn");
+
+let stream;
+
+// ===============================
+//  START CAMERA
+// ===============================
+async function startCamera() {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+    } catch (err) {
+        showPopup("Akses Kamera Ditolak", "Silakan izinkan kamera di browser Anda.");
+    }
+}
+
+startCamera();
+
+
+// ===============================
+//  POPUP FUNCTION
+// ===============================
+function showPopup(title, message) {
+    document.getElementById("notifTitle").innerText = title;
+    document.getElementById("notifMessage").innerText = message;
+    document.getElementById("notifToggle").checked = true;
+}
+
+
+// ===============================
+//  CHECK IF CANVAS IS BLANK
+// ===============================
+function isCanvasBlank(cv) {
+    const blank = document.createElement("canvas");
+    blank.width = cv.width;
+    blank.height = cv.height;
+    return cv.toDataURL() === blank.toDataURL();
+}
+
+
+// ===============================
+//  CAPTURE FOTO
+// ===============================
+captureBtn.onclick = () => {
+
+    // pastikan kamera aktif
+    if (!video.srcObject) {
+        showPopup("Kamera Tidak Aktif", "Hidupkan kamera terlebih dahulu.");
+        return;
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    const maxWidth = 480;
+    const scale = maxWidth / video.videoWidth;
+
+    canvas.width = maxWidth;
+    canvas.height = video.videoHeight * scale;
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // cek foto hitam / blank
+    if (isCanvasBlank(canvas)) {
+        showPopup("Foto Gagal", "Kamera belum aktif atau kondisi terlalu gelap.");
+        return;
+    }
+
+    imageData.value = canvas.toDataURL("image/jpeg", 0.6);
+
+    showPopup("Foto Berhasil!", "Foto berhasil diambil dan diperkecil.");
+};
+
+
+// ===============================
+//  REFRESH KAMERA
+// ===============================
+refreshBtn.onclick = () => {
+    startCamera();
+};
+
+
+// ===============================
+//  CEGAH SUBMIT TANPA FOTO
+// ===============================
+document.getElementById("absenForm").addEventListener("submit", function(e) {
+    if (imageData.value.trim() === "") {
+        e.preventDefault();
+        showPopup("Tidak Bisa Submit", "Silakan ambil foto terlebih dahulu.");
+    }
+});
+
+</script>
+
+</body>
+</html>

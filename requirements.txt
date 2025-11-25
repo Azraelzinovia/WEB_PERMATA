@@ -1,0 +1,8 @@
+Flask
+pymongo
+opencv-python
+numpy
+pandas
+openpyxl
+python-dotenv
+

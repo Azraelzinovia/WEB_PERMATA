@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin – PERMATA</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+        }
+
+        .search-box {
+            width: 250px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(255,255,255,0.08);
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 12px;
+            font-size: 14px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .btn-danger {
+            background: #f87171;
+            color: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.2s;
+        }
+
+        .btn-danger:hover {
+            background: #ef4444;
+            transform: scale(1.05);
+        }
+
+        .action-row {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .date-filter {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="/">Absensi</a>
+    <a href="/admin-login" class="active">Admin</a>
+</div>
+
+<div class="main">
+
+    <div class="card">
+
+        <div class="admin-header">
+            <h2>Dashboard Admin</h2>
+
+            <input type="text" id="searchInput" class="search-box" placeholder="Cari nama...">
+        </div>
+
+        <label style="color:#94a3b8;">Filter Tanggal:</label>
+        <input type="date" id="dateFilter" class="date-filter">
+
+        <div class="table-container">
+            <table id="absenTable">
+                <tr>
+                    <th>Nama</th>
+                    <th>Foto</th>
+                    <th>Waktu</th>
+                    <th>Aksi</th>
+                </tr>
+
+                {% for a in absensi %}
+                <tr>
+                    <td class="name-col">{{ a.name }}</td>
+                    <td><img src="{{ url_for('static', filename='registered_photos/' + a.photo) }}" width="80" style="border-radius:8px;"></td>
+                    <td class="time-col">{{ a.timestamp }}</td>
+                    <td>
+                        <a href="/delete/{{ a._id }}" 
+                        onclick="return confirm('Yakin ingin menghapus data ini?')" 
+                        class="btn-danger">Hapus</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="action-row">
+            <a href="/export-excel" class="btn primary">Export Excel</a>
+            <a href="/admin-logout" class="btn ghost">Logout</a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // SEARCH
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("#absenTable tr");
+
+        rows.forEach((row, idx) => {
+            if (idx === 0) return;
+            let name = row.querySelector(".name-col").textContent.toLowerCase();
+            row.style.display = name.includes(filter) ? "" : "none";
+        });
+    });
+
+    // FILTER TANGGAL
+    document.getElementById("dateFilter").addEventListener("change", function () {
+        let filterDate = this.value;
+        let rows = document.querySelectorAll("#absenTable tr");
+
+        rows.forEach((row, idx) => {
+            if (idx === 0) return;
+            let time = row.querySelector(".time-col").textContent.split(" ")[0];
+            row.style.display = time === filterDate ? "" : "none";
+        });
+    });
+</script>
+
+</body>
+</html>
