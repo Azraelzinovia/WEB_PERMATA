@@ -161,3 +161,40 @@ def admin_logout():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+@app.route("/rekap")
+def rekap():
+    if not session.get("is_admin"):
+        return redirect("/admin-login")
+
+    data = list(absensi_collection.find())
+
+    rekap_dict = {}
+
+    for item in data:
+        name = item.get("name")
+
+        if name not in rekap_dict:
+            rekap_dict[name] = {
+                "total": 0,
+                "last": item.get("timestamp"),
+                "kegiatan": item.get("kegiatan")
+            }
+
+        rekap_dict[name]["total"] += 1
+
+        # update waktu terakhir hadir
+        if item.get("timestamp") > rekap_dict[name]["last"]:
+            rekap_dict[name]["last"] = item.get("timestamp")
+            rekap_dict[name]["kegiatan"] = item.get("kegiatan")
+
+    # ubah ke list agar bisa di-render
+    hasil = []
+    for nama, info in rekap_dict.items():
+        hasil.append({
+            "name": nama,
+            "total": info["total"],
+            "last": info["last"],
+            "kegiatan": info["kegiatan"]
+        })
+
+    return render_template("rekap.html", hasil=hasil)

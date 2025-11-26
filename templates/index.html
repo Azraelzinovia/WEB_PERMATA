@@ -27,6 +27,7 @@
     </div>
 </div>
 
+
 <!-- MAIN -->
 <div class="main">
     <div class="card">
@@ -41,24 +42,51 @@
                 <label for="name">Nama Lengkap</label>
                 <input type="text" id="name" name="name" required>
             </div>
+<!-- Kegiatan -->
+<div class="form-group">
+    <label for="kegiatan">Kegiatan</label>
 
-            <!-- Kegiatan -->
-            <div class="form-group">
-                <label for="kegiatan">Kegiatan</label>
-                <select id="kegiatan" name="kegiatan" required class="input-text">
-                    <option value="">Pilih Kegiatan</option>
-                    <option value="PA">PA</option>
-                    <option value="KP">KP</option>
-                    <option value="OLAHRAGA">OLAHRAGA</option>
-                    <option value="LAINNYA">LAINNYA</option>
-                </select>
-            </div>
+    <select id="kegiatan" name="kegiatan" required class="input-select">
+        <option value="">Pilih Kegiatan</option>
+        <option value="PA">PA (Persekutuan)</option>
+        <option value="KP">KP (Komisi)</option>
+        <option value="OLAHRAGA">Olahraga</option>
+        <option value="LAINNYA">Lainnya</option>
+    </select>
 
-            <!-- Jika pilih Lainnya -->
-            <div class="form-group" id="kegiatanLainWrapper" style="display:none;">
-                <label for="kegiatanLain">Keterangan Kegiatan</label>
-                <input type="text" id="kegiatanLain" name="kegiatanLain" placeholder="Tulis kegiatan lainnya...">
-            </div>
+    <div id="kegiatanLainWrap" style="display:none; margin-top:10px;">
+        <input type="text" id="kegiatanLain" 
+               name="kegiatanLain" 
+               placeholder="Tulis kegiatan lainnya..." 
+               class="input-text" />
+    </div>
+</div>
+
+<!-- Input keterangan lainnya -->
+<div class="form-group" id="kegiatanLainWrapper" style="display:none;">
+    <label for="kegiatanLain">Keterangan Lainnya</label>
+    <input type="text" id="kegiatanLain" name="kegiatanLain">
+</div>
+
+
+<!-- Input tambahan jika memilih "Lainnya" -->
+<div class="form-group" id="kegiatanLainWrapper" style="display:none;">
+    <label for="kegiatanLain">Keterangan Kegiatan</label>
+    <input type="text" id="kegiatanLain" name="kegiatanLain" placeholder="Tulis kegiatan lainnya">
+</div>
+
+<script>
+document.getElementById("kegiatan").addEventListener("change", function() {
+    const wrapper = document.getElementById("kegiatanLainWrapper");
+    if (this.value === "LAINNYA") {
+        wrapper.style.display = "block";
+        document.getElementById("kegiatanLain").required = true;
+    } else {
+        wrapper.style.display = "none";
+        document.getElementById("kegiatanLain").required = false;
+    }
+});
+</script>
 
             <!-- Kamera -->
             <div class="camera-wrapper">
@@ -80,6 +108,7 @@
     </div>
 </div>
 
+
 <!-- NOTIFICATION POPUP -->
 <input type="checkbox" id="notifToggle" hidden>
 
@@ -92,24 +121,11 @@
     </div>
 </div>
 
+
+
 <!-- SCRIPT -->
 <script>
 
-// Dropdown kegiatan
-document.getElementById("kegiatan").addEventListener("change", function () {
-    const wrap = document.getElementById("kegiatanLainWrapper");
-
-    if (this.value === "LAINNYA") {
-        wrap.style.display = "block";
-        document.getElementById("kegiatanLain").required = true;
-    } else {
-        wrap.style.display = "none";
-        document.getElementById("kegiatanLain").required = false;
-        document.getElementById("kegiatanLain").value = "";
-    }
-});
-
-// CAMERA CONFIG
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const imageData = document.getElementById("imageData");
@@ -118,6 +134,9 @@ const refreshBtn = document.getElementById("refreshBtn");
 
 let stream;
 
+// ===============================
+//  START CAMERA
+// ===============================
 async function startCamera() {
     try {
         stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -129,12 +148,20 @@ async function startCamera() {
 
 startCamera();
 
+
+// ===============================
+//  POPUP FUNCTION
+// ===============================
 function showPopup(title, message) {
     document.getElementById("notifTitle").innerText = title;
     document.getElementById("notifMessage").innerText = message;
     document.getElementById("notifToggle").checked = true;
 }
 
+
+// ===============================
+//  CHECK IF CANVAS IS BLANK
+// ===============================
 function isCanvasBlank(cv) {
     const blank = document.createElement("canvas");
     blank.width = cv.width;
@@ -142,7 +169,13 @@ function isCanvasBlank(cv) {
     return cv.toDataURL() === blank.toDataURL();
 }
 
+
+// ===============================
+//  CAPTURE FOTO
+// ===============================
 captureBtn.onclick = () => {
+
+    // pastikan kamera aktif
     if (!video.srcObject) {
         showPopup("Kamera Tidak Aktif", "Hidupkan kamera terlebih dahulu.");
         return;
@@ -158,6 +191,7 @@ captureBtn.onclick = () => {
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+    // cek foto hitam / blank
     if (isCanvasBlank(canvas)) {
         showPopup("Foto Gagal", "Kamera belum aktif atau kondisi terlalu gelap.");
         return;
@@ -168,12 +202,44 @@ captureBtn.onclick = () => {
     showPopup("Foto Berhasil!", "Foto berhasil diambil dan diperkecil.");
 };
 
-refreshBtn.onclick = () => startCamera();
 
+// ===============================
+//  REFRESH KAMERA
+// ===============================
+refreshBtn.onclick = () => {
+    startCamera();
+};
+
+
+// ===============================
+//  CEGAH SUBMIT TANPA FOTO
+// ===============================
 document.getElementById("absenForm").addEventListener("submit", function(e) {
     if (imageData.value.trim() === "") {
         e.preventDefault();
         showPopup("Tidak Bisa Submit", "Silakan ambil foto terlebih dahulu.");
+    }
+});
+document.getElementById("kegiatan").addEventListener("change", function() {
+    const wrapper = document.getElementById("kegiatanLainWrapper");
+    if (this.value === "LAINNYA") {
+        wrapper.style.display = "block";
+        document.getElementById("kegiatanLain").required = true;
+    } else {
+        wrapper.style.display = "none";
+        document.getElementById("kegiatanLain").required = false;
+    }
+});
+document.getElementById("kegiatan").addEventListener("change", function () {
+    const wrap = document.getElementById("kegiatanLainWrap");
+
+    if (this.value === "LAINNYA") {
+        wrap.style.display = "block";
+        document.getElementById("kegiatanLain").required = true;
+    } else {
+        wrap.style.display = "none";
+        document.getElementById("kegiatanLain").required = false;
+        document.getElementById("kegiatanLain").value = "";
     }
 });
 

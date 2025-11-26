@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Kehadiran – PERMATA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="navbar">
+    <a href="/">Absensi</a>
+    <a href="/admin" class="active">Admin</a>
+</div>
+
+<div class="main">
+    <div class="card">
+        <h2>Rekap Kehadiran</h2>
+
+        <table>
+            <tr>
+                <th>Nama</th>
+                <th>Total Hadir</th>
+                <th>Terakhir Hadir</th>
+                <th>Kegiatan Terakhir</th>
+            </tr>
+
+            {% for r in hasil %}
+            <tr>
+                <td>{{ r.name }}</td>
+                <td>{{ r.total }}</td>
+                <td>{{ r.last }}</td>
+                <td>{{ r.kegiatan }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <a href="/admin" class="btn ghost" style="margin-top:20px;">Kembali</a>
+    </div>
+</div>
+
+</body>
+</html>
