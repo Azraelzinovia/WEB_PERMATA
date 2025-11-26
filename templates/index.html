@@ -42,16 +42,24 @@
                 <label for="name">Nama Lengkap</label>
                 <input type="text" id="name" name="name" required>
             </div>
-            <!-- Kegiatan -->
+<!-- Kegiatan -->
 <div class="form-group">
     <label for="kegiatan">Kegiatan</label>
-    <select id="kegiatan" name="kegiatan" required>
+
+    <select id="kegiatan" name="kegiatan" required class="input-select">
         <option value="">Pilih Kegiatan</option>
-        <option value="PA">PA</option>
-        <option value="KP">KP</option>
-        <option value="OLAHRAGA">OLAHRAGA</option>
-        <option value="LAINNYA">LAINNYA</option>
+        <option value="PA">PA (Persekutuan)</option>
+        <option value="KP">KP (Komisi)</option>
+        <option value="OLAHRAGA">Olahraga</option>
+        <option value="LAINNYA">Lainnya</option>
     </select>
+
+    <div id="kegiatanLainWrap" style="display:none; margin-top:10px;">
+        <input type="text" id="kegiatanLain" 
+               name="kegiatanLain" 
+               placeholder="Tulis kegiatan lainnya..." 
+               class="input-text" />
+    </div>
 </div>
 
 <!-- Input keterangan lainnya -->
@@ -220,6 +228,18 @@ document.getElementById("kegiatan").addEventListener("change", function() {
     } else {
         wrapper.style.display = "none";
         document.getElementById("kegiatanLain").required = false;
+    }
+});
+document.getElementById("kegiatan").addEventListener("change", function () {
+    const wrap = document.getElementById("kegiatanLainWrap");
+
+    if (this.value === "LAINNYA") {
+        wrap.style.display = "block";
+        document.getElementById("kegiatanLain").required = true;
+    } else {
+        wrap.style.display = "none";
+        document.getElementById("kegiatanLain").required = false;
+        document.getElementById("kegiatanLain").value = "";
     }
 });
 

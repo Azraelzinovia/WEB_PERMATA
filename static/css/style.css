@@ -303,3 +303,43 @@ video, canvas {
 @media (max-width: 768px) {
   .main { padding: 30px 20px; }
 }
+/* Dropdown modern */
+.input-select {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-select:hover {
+    background: rgba(255,255,255,0.12);
+    cursor: pointer;
+}
+
+.input-select:focus {
+    border-color: #ffd369;
+    box-shadow: 0 0 0 2px rgba(255,211,105,0.3);
+}
+
+/* Text input untuk "Lainnya" */
+.input-text {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-text:focus {
+    border-color: #ffd369;
+    box-shadow: 0 0 0 2px rgba(255,211,105,0.3);
+}
