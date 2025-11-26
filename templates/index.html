@@ -45,14 +45,26 @@
 <!-- Kegiatan -->
 <div class="form-group">
     <label for="kegiatan">Kegiatan</label>
+<div class="form-group">
+    <label for="kegiatan">Kegiatan</label>
 
-    <select id="kegiatan" name="kegiatan" required class="input-select">
-        <option value="">Pilih Kegiatan</option>
-        <option value="PA">PA (Persekutuan)</option>
-        <option value="KP">KP (Komisi)</option>
-        <option value="OLAHRAGA">Olahraga</option>
-        <option value="LAINNYA">Lainnya</option>
-    </select>
+    <div class="dropdown-custom" id="dropdownKegiatan">
+        <div class="dropdown-selected">Pilih Kegiatan</div>
+
+        <div class="dropdown-list">
+            <div class="dropdown-item">PA</div>
+            <div class="dropdown-item">KP</div>
+            <div class="dropdown-item">OLAHRAGA</div>
+            <div class="dropdown-item">LAINNYA</div>
+        </div>
+    </div>
+
+    <input type="hidden" id="kegiatan" name="kegiatan" required>
+
+    <input type="text" id="kegiatanLain" name="kegiatanLain" 
+           placeholder="Tulis kegiatan lain..."
+           style="display:none; margin-top:10px;">
+</div>
 
     <div id="kegiatanLainWrap" style="display:none; margin-top:10px;">
         <input type="text" id="kegiatanLain" 
@@ -87,6 +99,40 @@ document.getElementById("kegiatan").addEventListener("change", function() {
     }
 });
 </script>
+const dropdown = document.getElementById("dropdownKegiatan");
+const dropdownList = dropdown.querySelector(".dropdown-list");
+const selected = dropdown.querySelector(".dropdown-selected");
+const kegiatanInput = document.getElementById("kegiatan");
+const kegiatanLain = document.getElementById("kegiatanLain");
+
+dropdown.addEventListener("click", () => {
+    dropdownList.style.display = dropdownList.style.display === "block" ? "none" : "block";
+});
+
+document.querySelectorAll(".dropdown-item").forEach(item => {
+    item.addEventListener("click", () => {
+        let value = item.textContent;
+
+        selected.textContent = value;
+        kegiatanInput.value = value;
+
+        dropdownList.style.display = "none";
+
+        if (value === "LAINNYA") {
+            kegiatanLain.style.display = "block";
+            kegiatanLain.required = true;
+        } else {
+            kegiatanLain.style.display = "none";
+            kegiatanLain.required = false;
+        }
+    });
+});
+
+document.addEventListener("click", e => {
+    if (!dropdown.contains(e.target)) {
+        dropdownList.style.display = "none";
+    }
+});
 
             <!-- Kamera -->
             <div class="camera-wrapper">
